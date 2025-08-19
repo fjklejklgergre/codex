@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="fr" class="no-js" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vitrine Moderne</title>
+  <meta name="description" content="Template de site vitrine moderne, responsive, avec switch sombre/clair.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%2300A7FF'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='56' fill='white' font-family='Arial, Helvetica, sans-serif'%3EV%3C/text%3E%3C/svg%3E">
+  <style>
+    /* ------------------------------
+       Design tokens
+    ------------------------------ */
+    :root {
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow-1: 0 1px 2px rgba(0,0,0,.06), 0 3px 8px rgba(0,0,0,.08);
+      --shadow-2: 0 6px 24px rgba(0,0,0,.12);
+
+      /* Typo & rhythm */
+      --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      --fs-hero: clamp(2rem, 4vw + 1rem, 3.25rem);
+      --fs-h2: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
+      --fs-body: clamp(0.98rem, 0.3vw + 0.9rem, 1.05rem);
+      --container: min(1100px, 92vw);
+
+      /* Couleurs (thème clair par défaut) */
+      --bg: #ffffff;
+      --bg-soft: #f6f7f9;
+      --text: #0f172a;        /* Slate-900 */
+      --text-soft: #334155;   /* Slate-700 */
+      --muted: #64748b;       /* Slate-500 */
+      --primary: #2563eb;     /* Indigo/Blue */
+      --primary-contrast: #ffffff;
+      --border: #e5e7eb;
+      --accent: #0ea5e9;      /* Sky */
+      --focus: #22d3ee;       /* Cyan */
+    }
+    /* Thème sombre */
+    [data-theme="dark"] {
+      --bg: #0b1220;
+      --bg-soft: #0f172a;
+      --text: #f8fafc;
+      --text-soft: #e2e8f0;
+      --muted: #94a3b8;
+      --primary: #60a5fa;
+      --primary-contrast: #0b1220;
+      --border: #1f2937;
+      --accent: #38bdf8;
+      --focus: #22d3ee;
+    }
+
+    /* Reset modern & base */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font-sans);
+      color:var(--text);
+      background:linear-gradient(180deg,var(--bg),var(--bg-soft));
+      font-size:var(--fs-body);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.6;
+    }
+    img{max-width:100%;display:block}
+    a{color:var(--primary);text-decoration:none}
+    a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+
+    .container{width:var(--container);margin-inline:auto;padding-inline:1rem}
+    .btn{
+      display:inline-flex;align-items:center;gap:.5rem;
+      background:var(--primary);color:var(--primary-contrast);
+      border:none;border-radius:999px;padding:.8rem 1.1rem;
+      font-weight:600; box-shadow:var(--shadow-1); cursor:pointer;
+    }
+    .btn:hover{filter:brightness(1.05)}
+    .btn.ghost{
+      background:transparent;color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: saturate(140%) blur(8px);
+      background: color-mix(in oklab, var(--bg) 86%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.75rem 0;
+    }
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+    .brand__logo{
+      width:34px;height:34px;border-radius:10px;background:var(--accent);
+      display:grid;place-items:center;color:#001018;font-weight:900;box-shadow:var(--shadow-1)
+    }
+    .nav__actions{display:flex;align-items:center;gap:.5rem}
+
+    /* Theme toggle button */
+    .toggle{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:42px;height:42px;border-radius:999px;border:1px solid var(--border);
+      background:var(--bg); color:var(--text); box-shadow:var(--shadow-1);
+    }
+    .toggle svg{width:20px;height:20px}
+    .toggle .moon{display:none}
+    [data-theme="dark"] .toggle .sun{display:none}
+    [data-theme="dark"] .toggle .moon{display:block}
+
+    /* Mobile menu (simple anchor row) */
+    .nav__links{
+      display:flex;gap:1rem;flex-wrap:wrap;
+    }
+    .nav__links a{
+      padding:.5rem .75rem;border-radius:10px;border:1px solid transparent
+    }
+    .nav__links a:hover{border-color:var(--border);text-decoration:none}
+
+    /* Hero */
+    .hero{
+      padding-block: clamp(2rem, 6vw, 5rem);
+    }
+    .hero__grid{
+      display:grid;gap:2rem;align-items:center;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 860px){
+      .hero__grid{grid-template-columns: 1.1fr .9fr;}
+    }
+    .hero h1{font-size:var(--fs-hero);line-height:1.1;margin:0 0 .8rem}
+    .hero p{color:var(--text-soft);margin:0 0 1.4rem}
+    .hero__cta{display:flex;gap:.75rem;flex-wrap:wrap}
+
+    /* Mockup block */
+    .mockup{
+      background:linear-gradient(180deg,var(--bg-soft),color-mix(in oklab,var(--bg) 70%,transparent));
+      border:1px solid var(--border); border-radius:var(--radius);
+      padding:1rem; box-shadow:var(--shadow-2);
+    }
+    .screen{
+      aspect-ratio:16/10;border-radius:10px;border:1px solid var(--border);
+      background:
+        radial-gradient(1200px 600px at -10% -20%, color-mix(in oklab,var(--accent) 25%, transparent), transparent 50%),
+        radial-gradient(800px 500px at 120% 120%, color-mix(in oklab,var(--primary) 25%, transparent), transparent 60%),
+        linear-gradient(180deg, color-mix(in oklab,var(--bg) 80%, transparent), var(--bg-soft));
+      display:grid;place-items:center;color:var(--muted);font-weight:600;
+    }
+
+    /* Sections */
+    section{padding-block: clamp(2rem, 5vw, 4.5rem); border-top:1px solid var(--border)}
+    .section__head{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1.25rem}
+    h2{font-size:var(--fs-h2);margin:0}
+
+    /* Cards grid */
+    .grid{
+      display:grid;gap:1rem;
+      grid-template-columns: repeat(1, minmax(0,1fr));
+    }
+    @media (min-width:700px){ .grid{grid-template-columns: repeat(2,1fr);} }
+    @media (min-width:1000px){ .grid{grid-template-columns: repeat(3,1fr);} }
+    .card{
+      border:1px solid var(--border); border-radius:var(--radius);
+      padding:1rem;background:var(--bg); box-shadow:var(--shadow-1);
+    }
+    .card h3{margin-top:0;margin-bottom:.5rem}
+    .pill{
+      font-size:.8rem;border:1px solid var(--border);padding:.25rem .5rem;border-radius:999px;color:var(--muted)
+    }
+
+    /* Témoignages */
+    .testimonial{
+      display:flex;gap:1rem;align-items:flex-start
+    }
+    .avatar{
+      width:48px;height:48px;border-radius:50%;
+      background:var(--accent);display:grid;place-items:center;color:#001018;font-weight:800
+    }
+    blockquote{margin:0;color:var(--text-soft)}
+
+    /* CTA bandeau */
+    .cta{
+      text-align:center; padding: clamp(1.25rem, 3vw, 2rem);
+      border:1px dashed var(--border); background:var(--bg);
+      border-radius:var(--radius); box-shadow:var(--shadow-1)
+    }
+
+    /* Formulaire contact */
+    form{
+      display:grid;gap:.9rem;max-width:680px
+    }
+    label{font-weight:600}
+    input, textarea{
+      width:100%; padding:.8rem; border-radius:10px; border:1px solid var(--border);
+      background:var(--bg); color:var(--text)
+    }
+    textarea{min-height:140px;resize:vertical}
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--border);
+      padding:1.25rem 0; color:var(--muted); font-size:.95rem;
+    }
+
+    /* Motion-friendly */
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition:none !important}
+    }
+
+    /* JS disabled fallback */
+    .no-js [data-js-only]{display:none}
+  </style>
+</head>
+<body>
+  <a href="#contenu" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Aller au contenu</a>
+
+  <header>
+    <div class="container nav" role="navigation" aria-label="Navigation principale">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true">V</div>
+        <span>Vitrine</span>
+      </div>
+      <nav class="nav__links" aria-label="Liens de section">
+        <a href="#services">Services</a>
+        <a href="#realisations">Réalisations</a>
+        <a href="#temoignages">Avis</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav__actions">
+        <button class="toggle" id="themeToggle" aria-label="Basculer le thème" aria-pressed="false">
+          <!-- Sun -->
+          <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 4V2M12 22v-2M4.93 4.93 3.52 3.52M20.48 20.48 19.07 19.07M4 12H2M22 12h-2M4.93 19.07 3.52 20.48M20.48 3.52 19.07 4.93" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <!-- Moon -->
+          <svg class="moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+        <a class="btn ghost" href="#contact">Obtenir un devis</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero__grid">
+        <div>
+          <span class="pill">Sobre • Moderne • Responsive</span>
+          <h1>Présentez votre activité avec impact, sans complexité.</h1>
+          <p>Un template minimaliste pensé pour charger vite, s’adapter à tous les écrans, et offrir un confort visuel grâce au mode sombre/clair.</p>
+          <div class="hero__cta">
+            <a class="btn" href="#contact">Démarrer maintenant</a>
+            <a class="btn ghost" href="#realisations">Voir des exemples</a>
+          </div>
+        </div>
+        <div class="mockup" aria-hidden="true">
+          <div class="screen">Aperçu de votre vitrine</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+      <div class="container">
+        <div class="section__head">
+          <h2>Ce que nous faisons</h2>
+          <span class="pill">Personnalisable</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <h3>Conception rapide</h3>
+            <p>Structure claire, composants réutilisables. Ajoutez vos textes et images, publiez en un clin d’œil.</p>
+          </article>
+          <article class="card">
+            <h3>Performance</h3>
+            <p>HTML/CSS/JS minimal, optimisé mobile-first et compatible SEO de base (balises et sémantique propres).</p>
+          </article>
+          <article class="card">
+            <h3>Accessibilité</h3>
+            <p>Contrastes élevés, navigation clavier, focus visibles, et respect des préférences utilisateur.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- RÉALISATIONS -->
+    <section id="realisations">
+      <div class="container">
+        <div class="section__head">
+          <h2>Réalisations</h2>
+          <span class="pill">Exemples</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <div class="screen" style="aspect-ratio:4/3">Projet A</div>
+            <h3>Refonte site pro</h3>
+            <p>Identité épurée, typographie lisible, et parcours simple pour convertir.</p>
+          </article>
+          <article class="card">
+            <div class="screen" style="aspect-ratio:4/3">Projet B</div>
+            <h3>Landing produit</h3>
+            <p>Mise en avant claire de la proposition de valeur et des bénéfices.</p>
+          </article>
+          <article class="card">
+            <div class="screen" style="aspect-ratio:4/3">Projet C</div>
+            <h3>Portfolio créatif</h3>
+            <p>Grille modulable et visuels immersifs pour capter l’attention.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÉMOIGNAGES -->
+    <section id="temoignages">
+      <div class="container">
+        <div class="section__head">
+          <h2>Ils en parlent</h2>
+          <span class="pill">Confiance</span>
+        </div>
+        <div class="grid">
+          <figure class="card testimonial">
+            <div class="avatar" aria-hidden="true">A</div>
+            <blockquote>
+              “Template élégant et facile à prendre en main. La bascule sombre/clair est un vrai plus.”
+              <figcaption>— Anaïs, Indépendante</figcaption>
+            </blockquote>
+          </figure>
+          <figure class="card testimonial">
+            <div class="avatar" aria-hidden="true">M</div>
+            <blockquote>
+              “Responsive nickel sur smartphone. Perf et accessibilité au rendez-vous.”
+              <figcaption>— Marc, PME</figcaption>
+            </blockquote>
+          </figure>
+        </div>
+        <div class="cta" data-js-only>
+          <h3>Prêt à booster votre présence en ligne&nbsp;?</h3>
+          <p>Installez ce template, personnalisez, publiez. C’est tout.</p>
+          <a class="btn" href="#contact">Je me lance</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="container">
+        <div class="section__head">
+          <h2>Contact</h2>
+          <span class="pill">Réponse rapide</span>
+        </div>
+        <form aria-label="Formulaire de contact">
+          <div>
+            <label for="nom">Nom</label>
+            <input id="nom" name="nom" type="text" placeholder="Votre nom" required>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="vous@exemple.com" required>
+          </div>
+          <div>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Parlez-nous de votre projet..." required></textarea>
+          </div>
+          <button class="btn" type="submit">Envoyer</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> Vitrine — Tous droits réservés.
+    </div>
+  </footer>
+
+  <script>
+    // Enlever le fallback no-js
+    document.documentElement.classList.remove('no-js');
+
+    // Persistance du thème avec localStorage et respect de prefers-color-scheme
+    (function initTheme(){
+      const root = document.documentElement;
+      const stored = localStorage.getItem('theme'); // 'dark' | 'light' | 'auto'
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      function apply(theme){
+        // theme: 'light' | 'dark' | 'auto'
+        root.setAttribute('data-theme', theme === 'auto' ? (prefersDark ? 'dark' : 'light') : theme);
+        localStorage.setItem('theme', theme);
+        updateToggleAria(root.getAttribute('data-theme'));
+      }
+
+      function updateToggleAria(active){
+        const toggle = document.getElementById('themeToggle');
+        if (!toggle) return;
+        const isDark = active === 'dark';
+        toggle.setAttribute('aria-pressed', String(isDark));
+        toggle.title = isDark ? 'Passer en thème clair' : 'Passer en thème sombre';
+      }
+
+      // Appliquer dès le départ
+      if (stored === 'light' || stored === 'dark') {
+        apply(stored);
+      } else {
+        apply('auto');
+      }
+
+      // Réagir si l’OS change (quand en mode auto)
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)=>{
+        if (localStorage.getItem('theme') === 'auto') {
+          root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+          updateToggleAria(root.getAttribute('data-theme'));
+        }
+      });
+
+      // Toggle cyclique: light -> dark -> auto -> light ...
+      const btn = document.getElementById('themeToggle');
+      btn.addEventListener('click', ()=>{
+        const current = localStorage.getItem('theme') || 'auto';
+        const next = current === 'light' ? 'dark' : current === 'dark' ? 'auto' : 'light';
+        apply(next);
+      });
+    })();
+
+    // Année dynamique
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // (Démo) Empêcher l’envoi réel du formulaire
+    document.querySelector('form')?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      alert('Merci ! Votre message a bien été “envoyé” (démo).');
+    });
+  </script>
+</body>
+</html>
